@@ -25,4 +25,12 @@
   filter: alpha(opacity=40);
   outline: 12px auto #0A7EbE;
   background-color: white;
+  
+}
+
+.overlay-label{
+  text-align: center;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
 }

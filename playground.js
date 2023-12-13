@@ -25,26 +25,21 @@ function createOverlayElement(x, y, height, width, text) {
     return overlayElement;
 }
 
-function getClientToOverlayCoords(viewer, clientX, clientY, width, height) {
-    const imagePoint = new OpenSeadragon.Point(clientX, clientY);
-    // const imagePoint = viewer.viewport.viewerElementToImageCoordinates(viewportPoint);
+function getPixelToViewportCoords(viewer, x, y, width, height) {
+    const topLeft = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x - (width/2), y - (height/2)));
+    const bottomRight = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x + (width/2), y + (height/2)));
 
-    const viewportRect = new OpenSeadragon.Rect(
-        imagePoint.x,
-        imagePoint.y,
-        width / viewer.viewport.getZoom(true),
-        height / viewer.viewport.getZoom(true)
-    );
+    const viewportX = topLeft.x;
+    const viewportY = topLeft.y;
+    const viewportWidth = bottomRight.x - topLeft.x;
+    const viewportHeight = bottomRight.y - topLeft.y;
 
-    const overlayRect = viewer.viewport.imageToViewportRectangle(viewportRect);
-    console.log(overlayRect)
     return {
-        x: overlayRect.x,
-        y: overlayRect.y,
-        width: overlayRect.width,
-        height: overlayRect.height
+        x: viewportX,
+        y: viewportY,
+        width: viewportWidth,
+        height: viewportHeight
     };
-    
 }
 
 function getImageRegion(viewer, x, y, width, height) {
@@ -60,14 +55,22 @@ function getImageRegion(viewer, x, y, width, height) {
 
     // Draw the extracted region onto the new canvas
     extractedContext.putImageData(imageData, 0, 0);
+
+    // draw overlay on osd
+    let viewportCoords = getPixelToViewportCoords(viewer, x, y, width, height)
     viewer.removeOverlay("runtime-overlay");
-    const overlayCoords = getClientToOverlayCoords(viewer, x, y, 100, 100);
+    var overlayBox = new OpenSeadragon.Rect(viewportCoords.x, viewportCoords.y, viewportCoords.width, viewportCoords.height)
+    console.log(overlayBox)
     var elt = document.createElement("div");
     elt.id = "runtime-overlay";
     elt.className = "highlight";
+    let label = document.createElement("p")
+    label.innerText = "Long Text for LABEL | 75% Confidence"
+    label.classList.add('overlay-label')
+    elt.appendChild(label)
     viewer.addOverlay({
         element: elt,
-        location: new OpenSeadragon.Rect(x - height / 2, y + width / 2 + 16, height, width)
+        location: overlayBox
     });;
 
     // Create an image element to display the extracted region
