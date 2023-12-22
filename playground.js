@@ -6,6 +6,8 @@ var viewer = OpenSeadragon({
     tileSources: "./slides/OvCPTAC.dzi",
 });
 
+viewer.zoomPerClick = 1;
+
 viewer.addHandler('canvas-double-click', function (e) {
     // Handle the double-click event
     console.log(e.position.x);
