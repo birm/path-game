@@ -2,8 +2,8 @@ var viewer = OpenSeadragon({
     id: "osd",
     prefixUrl: "/openseadragon/images/",
     showNavigationControl: false,
-    defaultZoomLevel:2,
-    tileSources: "./slides/AortaJP2K.dzi",
+    defaultZoomLevel:1,
+    tileSources: "./slides/OvCPTAC.dzi",
 });
 
 viewer.addHandler('canvas-double-click', function (e) {
