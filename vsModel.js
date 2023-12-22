@@ -3,10 +3,7 @@ var viewer = OpenSeadragon({
     prefixUrl: "/openseadragon/images/",
     showNavigationControl: false,
     defaultZoomLevel:2,
-    tileSources: {
-        type: 'image',
-        url:  './picsum-sample.jpg'
-    }
+    tileSources: "./slides/LuadCPTAC.dzi",
 });
 
 viewer.addHandler('canvas-double-click', function (e) {
